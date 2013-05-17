@@ -54,6 +54,18 @@ module Serverspec
         ret[:exit_status] == 0
       end
 
+      def check_running_under_daemontools(example, process, at_least_uptime)
+        @example = example
+        ret = run_command(commands.check_running_under_daemontools(process))
+        
+        if ret[:exit_status] == 0 then
+          ret[:stdout] =~ /\/.*: up \(pid \d+\) (\d+) seconds/
+          $1.to_i >= at_least_uptime
+        else
+          false
+        end
+      end
+
       def check_running_under_supervisor(example, process)
         @example = example
         ret = run_command(commands.check_running_under_supervisor(process))

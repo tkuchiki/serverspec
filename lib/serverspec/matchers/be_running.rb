@@ -10,14 +10,19 @@ RSpec::Matchers.define :be_running do
           raise ArgumentError.new("`be_running` matcher doesn't support #{@under}")
         end
 
-        backend.send(check_method, example, process)
+        if (@attr) then
+          backend.send(check_method, example, process, @attr[:at_least_uptime])
+        else
+          backend.send(check_method, example, process)
+        end
       else
         backend.check_running(example, process)
       end
     end
   end
 
-  chain :under do |under|
+  chain :under do |under, attr|
     @under = under
+    @attr  = attr
   end
 end

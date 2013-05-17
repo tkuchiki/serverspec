@@ -73,6 +73,10 @@ module Serverspec
         "supervisorctl status #{escape(service)}"
       end
 
+      def check_running_under_daemontools service
+        "svstat #{escape(service)}"
+      end
+
       def check_process process
         "ps aux | grep -w -- #{escape(process)} | grep -qv grep"
       end
